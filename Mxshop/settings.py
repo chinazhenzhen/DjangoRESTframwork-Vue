@@ -51,9 +51,13 @@ INSTALLED_APPS = [
     'django_filters',
     'xadmin',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,7 +65,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'Mxshop.urls'
 
@@ -145,6 +152,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 #restframework配置文件
 REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS":"rest_framework.pagination.LimitOffsetPagination",#这里是pagenation的topic我们也可以自定义pagination
-    "PAGE_SIZE":10,
+    "DEFAULT_PAGINATION_CLASS":"rest_framework.pagination.PageNumberPagination",#这里是pagenation的topic我们也可以自定义pagination
 }
