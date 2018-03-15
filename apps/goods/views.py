@@ -26,6 +26,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework import filters #去drf的filters中的searchfilrter官方文档实现更多搜索功能
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.authentication import TokenAuthentication   #token认证
 from django_filters.rest_framework import DjangoFilterBackend    #django-filters的用法，详见官方文档,可以实现各种模糊搜索
 
 from .serializers import GoodsSerializer,CategorySerializer
@@ -45,11 +46,12 @@ class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):  #使用g
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
     pagination_class = GoodsPagination      #可以自行配置页面，但是配置文件有问题，所以放器配置，如果想要配置请参照他人代码，尤其要修改配置文件
+    #authentication_classes = (TokenAuthentication,) #配置token
 
     filter_backends = (DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter) #利用drf中的SearchFilter实现模糊搜索
     filter_class = GoodsFilter
     search_fields = ('name', 'goods_brief')#从两个属性中模糊搜索
-    ordering_fields = ('shop_price','add_time') #排序
+    ordering_fields = ('shop_price','sold_num') #排序
 
 class CategoryViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet):#加入mixins.RetrieveModelMixin就可以获取莫一个商品的详情
     """

@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'django_filters',
     'xadmin',
     'rest_framework',
-    'corsheaders',
+    'corsheaders',   #解决前后端跨域访问问题
+    'rest_framework.authtoken', #tokenAuth 见官方文档
 ]
 
 MIDDLEWARE = [
@@ -150,7 +151,30 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)  #users自定义验证
+
 #restframework配置文件
 REST_FRAMEWORK = {
+
+    #jwt配置文件，详情见drf-jwt官方文档，在git，jwt的详细设置配置在setting文件中
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',#加入token认证方式，官方文档并未明确给出
+    ),
+
     "DEFAULT_PAGINATION_CLASS":"rest_framework.pagination.PageNumberPagination",#这里是pagenation的topic我们也可以自定义pagination
+
+
+
 }
+
+#手机号码正则表达式
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
